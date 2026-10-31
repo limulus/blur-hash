@@ -1,0 +1,91 @@
+{
+  "name": "@limulus/blur-hash",
+  "version": "1.0.0",
+  "description": "Custom element that paints a BlurHash placeholder behind an image until it loads",
+  "keywords": [
+    "blurhash",
+    "custom-element",
+    "web-component",
+    "placeholder",
+    "lazy-loading"
+  ],
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js"
+    },
+    "./define": {
+      "types": "./dist/types/define.d.ts",
+      "import": "./dist/esm/define.js"
+    },
+    "./worker": {
+      "types": "./dist/types/lib/worker.d.ts",
+      "import": "./dist/esm/lib/worker.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**/*.spec.ts",
+    "!src/mocks"
+  ],
+  "type": "module",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=24"
+    }
+  },
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "node node_modules/typescript-7/bin/tsc --build tsconfig.build.json",
+    "clean": "del-cli *.tsbuildinfo coverage dist",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "prepack": "npm run build",
+    "prepare": "is-ci || husky",
+    "test": "vitest run --coverage --project chromium && vitest run --project webkit --project firefox",
+    "tscc": "node node_modules/typescript-7/bin/tsc --build",
+    "verify": "concurrently -c cyan,magenta,blue npm:lint npm:test npm:tscc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limulus/blur-hash.git"
+  },
+  "author": {
+    "name": "Eric McCarthy",
+    "email": "eric@limulus.net",
+    "url": "https://limulus.net/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/limulus/blur-hash/issues"
+  },
+  "homepage": "https://github.com/limulus/blur-hash#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@limulus/eslint-config": "^6.2.0",
+    "@types/node": "^24.12.0",
+    "@vitest/browser-playwright": "^4.1.12",
+    "@vitest/coverage-v8": "^4.1.10",
+    "concurrently": "^10.0.5",
+    "del-cli": "^7.0.0",
+    "eslint": "^10.8.1",
+    "husky": "^9.1.7",
+    "is-ci": "^4.1.0",
+    "playwright": "^1.64.1",
+    "typescript": "^6.0.3",
+    "typescript-7": "npm:typescript@7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "fast-blurhash": "^1.2.0"
+  }
+}

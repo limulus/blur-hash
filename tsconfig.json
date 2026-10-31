@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "incremental": true,
+    "noEmit": true,
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
+  },
+  "include": ["src/**/*", "types/**/*", "*.ts", "*.js"]
+}
