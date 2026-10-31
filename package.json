@@ -65,7 +65,6 @@
   },
   "homepage": "https://github.com/limulus/blur-hash#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
     "access": "public"
   },
   "devDependencies": {
