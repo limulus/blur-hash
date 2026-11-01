@@ -1,4 +1,5 @@
 import { BlurHashError } from './blur-hash-error.ts'
+import { crossOriginWorkerUrl, startableWorkerUrl } from './worker-url.ts'
 
 export interface BlurHashDecodeMessage {
   id: string
@@ -45,8 +46,9 @@ export class BlurHash extends HTMLElement {
   /**
    * Where to load the decode worker from. Leave unset if your bundler handles
    * `new Worker(new URL('./worker.js', import.meta.url))`; otherwise bundle
-   * `@limulus/blur-hash/worker` and set its URL here. It's read when the first placeholder
-   * is decoded.
+   * `@limulus/blur-hash/worker` and set its URL here. If it's on another origin, such as a
+   * CDN's, the worker is started from a `blob:` URL that imports it. It's read when the
+   * first placeholder is decoded.
    */
   static workerUrl: string | URL | undefined
 
@@ -222,14 +224,17 @@ function placeholderUrl(
 function createWorker(workerUrl: string | URL | undefined): Worker | null {
   let decoder: Worker
   try {
+    const url =
+      workerUrl === undefined
+        ? crossOriginWorkerUrl(import.meta.url)
+        : new URL(workerUrl, document.baseURI)
     // Spelled out in full so that bundlers which recognize this pattern bundle the worker.
     decoder =
-      workerUrl === undefined
+      url === undefined
         ? new Worker(new URL('./worker.js', import.meta.url), { type: 'module' })
-        : new Worker(workerUrl, { type: 'module' })
+        : new Worker(startableWorkerUrl(url), { type: 'module' })
   } catch (error) {
-    // Chromium throws here for a cross-origin worker, such as one loaded from a CDN, where
-    // other browsers fire the error event below instead.
+    // An invalid URL throws here, where one that fails to load fires the error event below.
     reportWorkerFailure(error)
     return null
   }

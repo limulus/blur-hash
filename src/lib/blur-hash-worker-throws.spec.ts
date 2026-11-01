@@ -8,7 +8,7 @@ describe('BlurHash', () => {
   describe('when the decode worker cannot be constructed', () => {
     it('should log once that no placeholders will be shown', () => {
       const error = vi.spyOn(console, 'error').mockImplementation(() => {})
-      // Not a valid URL, so `new Worker` throws, as Chromium does for a cross-origin one.
+      // Not a valid URL, so the worker can't be constructed.
       BlurHash.workerUrl = 'http://['
       BlurHash.define()
 

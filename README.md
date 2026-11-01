@@ -19,8 +19,9 @@ Import and automatically define the `<blur-hash>` custom element:
 import '@limulus/blur-hash/define'
 ```
 
-This package makes use of a web worker for BlurHash decoding and creation of BMP blobs.
-Check that your bundler has support for web workers or use a plugin that adds support.
+This package makes use of a web worker for BlurHash decoding and creation of BMP blobs. When
+using a bundler, check that it has support for web workers or use a plugin that adds
+support.
 
 Wrap your images in `<blur-hash>`, giving it the image’s BlurHash and the image’s full
 dimensions:
@@ -56,27 +57,9 @@ Defines the element under `name`, unless that name is already defined.
 ### `BlurHash.workerUrl`
 
 Property specifying the location of the decode worker, as a string or `URL`. Leave it unset
-if your bundler bundles the worker. It’s read when the first placeholder is decoded, so set
-it before calling `BlurHash.define()`, and import the main `@limulus/blur-hash` rather than
-`@limulus/blur-hash/define`.
-
-Browsers only start workers from the page’s origin, so if you load this package from a CDN,
-start the worker from a `blob:` URL that imports it. The CDN needs to rewrite bare imports
-to URLs, as `esm.sh` does, because the worker imports `fast-blurhash`:
-
-```javascript
-import { BlurHash } from 'https://esm.sh/@limulus/blur-hash@1.0.0'
-
-BlurHash.workerUrl = URL.createObjectURL(
-  new Blob(["import 'https://esm.sh/@limulus/blur-hash@1.0.0/worker'"], {
-    type: 'text/javascript',
-  })
-)
-
-BlurHash.define()
-```
-
-If your page has a Content Security Policy, it needs to allow `blob:` in `worker-src`.
+if your bundler bundles the worker, or if you load this package from `esm.sh`. It’s read
+when the first placeholder is decoded, so set it before calling `BlurHash.define()`, and
+import the main `@limulus/blur-hash` rather than `@limulus/blur-hash/define`.
 
 ### `BlurHashError`
 

@@ -7,6 +7,9 @@ export default defineConfig({
       enabled: true,
       headless: true,
       provider: playwright(),
+      // Otherwise it listens on whichever address localhost resolves to first. On 127.0.0.1,
+      // localhost reaches the same server from another origin, for specs that need one.
+      api: { host: '127.0.0.1' },
       instances: [
         { browser: 'chromium' },
         { browser: 'webkit' },
