@@ -65,6 +65,10 @@ stable API in TS 7.1. Don't "simplify" this arrangement.
   No Given/When/Then
 - **Avoid `vi.mock()`** — prefer tests that exercise real dependencies, and mock at the
   network layer (MSW) when you need to isolate from HTTP
+- **Use the `.test` TLD for made-up hosts**, as in `https://cdn.test/…`, not a real CDN or
+  site. It's reserved and never resolves, so a spec that only parses a URL can't be mistaken
+  for one that goes out over the internet. In documentation, such as the README and JSDoc,
+  use `.example` instead, which is reserved for that
 - **vitest 4 constructs mock implementations with `new`.** An arrow function is not
   constructable, so `vi.fn().mockImplementation(() => ({ … }))` throws when the subject
   calls `new`. Supply the shape via `Mock.prototype`, or use a `function` expression when
